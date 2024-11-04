@@ -13,6 +13,7 @@ public class CarRental {
     public CarRental(){
         cars.add(new Car("11AA22","Ferrari", 100));
         cars.add(new Car("11AA12","Ferrari", 1000));
+        cars.add(new Car("33AA44","Ferrari", 9999));
     }
 
     @GetMapping("/cars")
