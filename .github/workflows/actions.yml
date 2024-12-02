@@ -7,12 +7,28 @@ jobs:
     name: build
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'adopt'
+      - name: Start Kubernetes minikube
+        uses: medyagh/setup-minikube@master
+      - name: Try the Kubernetes cluster
+        run: kubectl get nodes
       - name: Build and test
         run: |
           export SHELL=/bin/bash
           ./gradlew build
+          eval $(minikube docker-env)
+          docker build -t mastersecu .
+      - name: Deploy the image to minikube
+        run:
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml
+      - name: Get Kubernetes service URL
+        run: |
+          kubectl get pods
+          kubectl wait --for=condition=Ready --timeout=60s pod -l app=rentalservice
+          kubectl get pods
+          minikube service list
