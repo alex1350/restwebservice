@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: essai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: essai
+  template:
+    metadata:
+      labels:
+        app: essai
+    spec:
+      containers:
+        - image: essai:1
+          imagePullPolicy: Never
+          name: essai
+      restartPolicy: Always
